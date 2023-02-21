@@ -8,7 +8,7 @@ class Files(models.Model):
     ingestion_time = models.DateTimeField()
 
 
-class Files(models.Model):
+class RegisterReadings(models.Model):
     mpan_core = models.IntegerField()
     meter_id = models.CharField(max_length=10)
     meter_register_id = models.CharField(max_length=2)
@@ -20,3 +20,5 @@ class Files(models.Model):
     reading_method = models.CharField(max_length=1)
     file_name = models.CharField(max_length=100)
     ingestion_time = models.DateTimeField()
+
+
