@@ -3,14 +3,9 @@ from django.conf import settings
 from meter_readings.models import Files, RegisterReadings
 import os.path
 from datetime import datetime
-import pprint
 
 
-file_inbox = os.path.join(settings.BASE_DIR,'meter_readings/file_inbox')
-file_name = 'DTC5259515123502080915D0010.uff'
-
-
-def register_readings_object(current_time, field_values):
+def register_readings_object(file_name, current_time, field_values):
     rr_object = RegisterReadings(
         mpan_core = field_values['mpan_core'],
         meter_id = field_values['meter_id'],
@@ -30,20 +25,28 @@ def register_readings_object(current_time, field_values):
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('file_path', nargs='?', default='')
+
 
     def handle(self, *args, **options):
-        print('command executed')
-        with open(os.path.join(file_inbox,file_name),'r') as file:
+        with open(options.get('file_path'),'r') as file:
             file_listified = list(file)
-        
+
+        file_name = os.path.basename(options.get('file_path'))
         current_time = datetime.now()
+
+        # Proceed only when the file has not been loaded before
+        existing_file = Files.objects.filter(file_name=file_name)
+        if existing_file.count() > 0:
+            return
+
         Files.objects.create(
-            file_name=file_name,header=file_listified[0],
+            file_name=file_name,
+            header=file_listified[0],
             footer=file_listified[-1],
             ingestion_time=current_time
         )
-        
+
 
         object_list = []
         field_values = {}
@@ -54,12 +57,12 @@ class Command(BaseCommand):
 
             # Repeating record for Meter/Register. Create an object using the previous Meter/Register before continuing.
             if 'meter_register_id' in field_values and record_listified[0] == '030':
-                the_object = register_readings_object(current_time, field_values)
+                the_object = register_readings_object(file_name, current_time, field_values)
                 object_list.append(the_object)
 
             # Repeating record for MPAN Core. Create an object with the previous record set and restart the process. 
             if 'mpan_core' in field_values and record_listified[0] == '026':
-                the_object = register_readings_object(current_time, field_values)
+                the_object = register_readings_object(file_name, current_time, field_values)
                 object_list.append(the_object)
 
                 field_values = {}
