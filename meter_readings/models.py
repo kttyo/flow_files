@@ -7,3 +7,16 @@ class Files(models.Model):
     footer = models.CharField(max_length=100)
     ingestion_time = models.DateTimeField()
 
+
+class Files(models.Model):
+    mpan_core = models.IntegerField()
+    meter_id = models.CharField(max_length=10)
+    meter_register_id = models.CharField(max_length=2)
+    reading_date_time = models.DateTimeField()
+    register_reading = models.DecimalField(max_digits=10, decimal_places=1)
+    md_reset_date_time = models.DateTimeField()
+    number_of_md_resets = models.IntegerField()
+    meter_reading_flag = models.BooleanField()
+    reading_method = models.CharField(max_length=1)
+    file_name = models.CharField(max_length=100)
+    ingestion_time = models.DateTimeField()
