@@ -5,8 +5,8 @@ import os.path
 from datetime import datetime
 
 
-def create_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time):
-    rr_object = RegisterReadings(
+def rr_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time):
+    new_object = RegisterReadings(
         # Data from MPAN Cores
         mpan_core = mpan_cores[1],
 
@@ -16,7 +16,7 @@ def create_object(mpan_cores, meter_reading_type, register_readings, file_name, 
         # Data from Register Readings
         meter_register_id = register_readings[1],
         reading_date_time = datetime.strptime(register_readings[2],'%Y%m%d%H%M%S'),
-        register_reading = register_readings[3],
+        register_reading = float(register_readings[3]),
         md_reset_date_time = None if register_readings[4] == '' else datetime.strptime(register_readings[4],'%Y%m%d%H%M%S'),
         number_of_md_resets = None if register_readings[5] == '' else register_readings[5],
         meter_reading_flag = True if register_readings[6] == 'T' else False,
@@ -25,7 +25,7 @@ def create_object(mpan_cores, meter_reading_type, register_readings, file_name, 
         ingestion_time = ingestion_time
     )
 
-    return rr_object
+    return new_object
 
 
 class Command(BaseCommand):
@@ -70,8 +70,8 @@ class Command(BaseCommand):
 
             # Create object and append it to object_list when a record set ends or footer appers
             if line_listified[0] <= prev_record_type or line_listified[0] > '999':
-                new_object = create_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time)
-                object_list.append(new_object)
+                new_rr_object = rr_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time)
+                object_list.append(new_rr_object)
 
             # Fresh start of the flow file.
             if line_listified[0] == '026':
