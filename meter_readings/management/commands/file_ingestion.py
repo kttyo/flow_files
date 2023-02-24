@@ -72,7 +72,7 @@ def create_rr_object(file_listified, ingestion_time, file_name):
     try:    
         RegisterReadings.objects.bulk_create(object_list)
     except Exception as e:
-        print(e)
+        logger.error(e)
     else:
         os.rename(file_inbox_path / file_name, imported_files_path / file_name)
 
@@ -92,27 +92,27 @@ class Command(BaseCommand):
         # If file name is passed as a command argument, only that file gets processed
         if options.get('file_name'):
             uff_files = [options.get('file_name')]
-
-        for file_name in uff_files:    
+        
+        for uff_file_name in uff_files:
+            file_in_inbox = file_inbox_path / uff_file_name
             try:
-                with open(file_inbox_path / file_name,'r') as file:
+                with open(file_in_inbox,'r') as file:
                     file_listified = list(file)
             except Exception as e:
                 logger.error(e)
 
             # Proceed only when the file has not been loaded before
-            existing_file = Files.objects.filter(file_name=file_name)
-            if existing_file.count() > 0:
-                print('The file you requested to ingest is already present in the database.')
-                return
+            if Files.objects.filter(file_name=uff_file_name).exists():
+                print(f'The file "{uff_file_name}" is already present in the database.')
+                continue
             
             # Insert into files table
             Files.objects.create(
-                file_name=file_name,
+                file_name=uff_file_name,
                 header=file_listified[0],
                 footer=file_listified[-1],
                 ingestion_time=ingestion_time
             )
 
             # Bulk-insert into register_readings table
-            create_rr_object(file_listified, ingestion_time, file_name)
+            create_rr_object(file_listified, ingestion_time, uff_file_name)

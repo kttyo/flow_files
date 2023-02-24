@@ -6,7 +6,7 @@ import os
 
 # Create your tests here.
 class DataTestCase(TestCase):
-    def test_data_comparison(self):
+    def test_file_ingestion(self):
         with open('./meter_readings/file_inbox/DTC5259515123502080915D0010.uff', 'r') as file:
             file_listified = file.readlines()
         
