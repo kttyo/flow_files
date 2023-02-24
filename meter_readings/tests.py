@@ -14,7 +14,7 @@ class DataTestCase(TestCase):
         for line in file_listified:
             if line.split('|')[0] == '030':
                 count_rr_record += 1
-        call_command('file_ingestion', './meter_readings/file_inbox/DTC5259515123502080915D0010.uff')
+        call_command('file_ingestion', 'DTC5259515123502080915D0010.uff')
         os.rename(
             './meter_readings/file_inbox/imported_files/DTC5259515123502080915D0010.uff',
             './meter_readings/file_inbox/DTC5259515123502080915D0010.uff'
