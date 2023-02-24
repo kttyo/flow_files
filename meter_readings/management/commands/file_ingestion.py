@@ -100,7 +100,8 @@ class Command(BaseCommand):
             if existing_file.count() > 0:
                 print('The file you requested to ingest is already present in the database.')
                 return
-
+            
+            # Insert into files table
             Files.objects.create(
                 file_name=file_name,
                 header=file_listified[0],
@@ -108,4 +109,5 @@ class Command(BaseCommand):
                 ingestion_time=ingestion_time
             )
 
+            # Bulk-insert into register_readings table
             create_rr_object(file_listified, ingestion_time, file_name)
