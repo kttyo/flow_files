@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from meter_readings.models import Files, RegisterReadings
 import os.path
+import os
 from datetime import datetime
 
 
@@ -34,14 +35,16 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
+        file_path = options.get('file_path')
+        file_name = os.path.basename(options.get('file_path'))
+        ingestion_time = datetime.now()
+        imported_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/imported_files/'
+
         try:
-            with open(options.get('file_path'),'r') as file:
+            with open(file_path,'r') as file:
                 file_listified = list(file)
         except Exception as e:
             print(e)
-
-        file_name = os.path.basename(options.get('file_path'))
-        ingestion_time = datetime.now()
 
         # Proceed only when the file has not been loaded before
         existing_file = Files.objects.filter(file_name=file_name)
@@ -92,3 +95,5 @@ class Command(BaseCommand):
             RegisterReadings.objects.bulk_create(object_list)
         except Exception as e:
             print(e)
+        else:
+            os.rename(file_path,imported_files_path / file_name)
