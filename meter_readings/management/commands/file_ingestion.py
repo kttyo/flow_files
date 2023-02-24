@@ -1,10 +1,13 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
-from meter_readings.models import Files, RegisterReadings
-import os.path
-import os
 from datetime import datetime
+import os
+import os.path
+
+from django.conf import settings
+from django.core.management.base import BaseCommand
 from django.utils import timezone
+
+from meter_readings.models import Files, RegisterReadings
+
 
 file_inbox_path = settings.BASE_DIR / 'meter_readings/file_inbox/'
 imported_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/imported_files/'
