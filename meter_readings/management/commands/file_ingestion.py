@@ -7,6 +7,8 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from meter_readings.models import Files, RegisterReadings
+import logging
+logger = logging.getLogger(__name__)
 
 
 file_inbox_path = settings.BASE_DIR / 'meter_readings/file_inbox/'
@@ -96,7 +98,7 @@ class Command(BaseCommand):
                 with open(file_inbox_path / file_name,'r') as file:
                     file_listified = list(file)
             except Exception as e:
-                print(e)
+                logger.error(e)
 
             # Proceed only when the file has not been loaded before
             existing_file = Files.objects.filter(file_name=file_name)
