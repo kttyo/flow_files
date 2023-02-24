@@ -7,6 +7,9 @@ class Files(models.Model):
     footer = models.CharField(max_length=100)
     ingestion_time = models.DateTimeField()
 
+    class Meta:
+        verbose_name_plural = "files"
+
 
 class RegisterReadings(models.Model):
     mpan_core = models.IntegerField()
@@ -20,5 +23,8 @@ class RegisterReadings(models.Model):
     reading_method = models.CharField(max_length=1)
     file_name = models.CharField(max_length=100)
     ingestion_time = models.DateTimeField()
+
+    class Meta:
+        verbose_name_plural = "register_readings"
 
 
