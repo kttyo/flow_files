@@ -22,9 +22,9 @@ def rr_object(mpan_cores, meter_reading_type, register_readings, file_name, inge
 
         # Data from Register Readings
         meter_register_id = register_readings[1],
-        reading_date_time = datetime.strptime(register_readings[2],'%Y%m%d%H%M%S'),
+        reading_date_time = timezone.make_aware(datetime.strptime(register_readings[2],'%Y%m%d%H%M%S')),
         register_reading = float(register_readings[3]),
-        md_reset_date_time = None if register_readings[4] == '' else datetime.strptime(register_readings[4],'%Y%m%d%H%M%S'),
+        md_reset_date_time = None if register_readings[4] == '' else timezone.make_aware(datetime.strptime(register_readings[4],'%Y%m%d%H%M%S')),
         number_of_md_resets = None if register_readings[5] == '' else register_readings[5],
         meter_reading_flag = True if register_readings[6] == 'T' else False,
         reading_method = register_readings[7],
