@@ -43,6 +43,7 @@ class Command(BaseCommand):
         # Proceed only when the file has not been loaded before
         existing_file = Files.objects.filter(file_name=file_name)
         if existing_file.count() > 0:
+            print('The file you requested to ingest is already present in the database.')
             return
 
         Files.objects.create(
