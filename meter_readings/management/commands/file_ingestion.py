@@ -7,8 +7,13 @@ from datetime import datetime
 
 def create_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time):
     rr_object = RegisterReadings(
+        # Data from MPAN Cores
         mpan_core = mpan_cores[1],
+
+        # Data from Meter/Reading Types
         meter_id = meter_reading_type[1],
+
+        # Data from Register Readings
         meter_register_id = register_readings[1],
         reading_date_time = datetime.strptime(register_readings[2],'%Y%m%d%H%M%S'),
         register_reading = register_readings[3],
