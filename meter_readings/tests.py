@@ -16,7 +16,7 @@ class DataTestCase(TestCase):
                 count_rr_record += 1
         call_command('file_ingestion', 'DTC5259515123502080915D0010.uff')
         os.rename(
-            './meter_readings/file_inbox/imported_files/DTC5259515123502080915D0010.uff',
+            './meter_readings/file_inbox/ingested_files/DTC5259515123502080915D0010.uff',
             './meter_readings/file_inbox/DTC5259515123502080915D0010.uff'
             )
         data_count = RegisterReadings.objects.all().count()

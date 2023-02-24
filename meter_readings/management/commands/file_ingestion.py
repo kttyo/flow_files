@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 file_inbox_path = settings.BASE_DIR / 'meter_readings/file_inbox/'
-imported_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/imported_files/'
+ingested_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/ingested_files/'
 
 def rr_object(mpan_cores, meter_reading_type, register_readings, file_name, ingestion_time):
     new_object = RegisterReadings(
@@ -75,7 +75,7 @@ def create_rr_object(file_listified, ingestion_time, file_name):
         logger.error(e)
     else:
         logger.info(f'File "{file_name}" was successfully ingested.')
-        os.rename(file_inbox_path / file_name, imported_files_path / file_name)
+        os.rename(file_inbox_path / file_name, ingested_files_path / file_name)
 
 
 class Command(BaseCommand):

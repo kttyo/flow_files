@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 file_inbox_path = settings.BASE_DIR / 'meter_readings/file_inbox/'
-imported_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/imported_files/'
+ingested_files_path = settings.BASE_DIR / 'meter_readings/file_inbox/ingested_files/'
 
 
 class Command(BaseCommand):
@@ -20,6 +20,6 @@ class Command(BaseCommand):
         logger.info(f'Files count :{files_count}')
         logger.info(f'RegisterReadings count: {register_readings_count}')
 
-        paths = os.listdir(imported_files_path)
+        paths = os.listdir(ingested_files_path)
         for path in paths:
-            os.rename(imported_files_path / path, file_inbox_path / path)
+            os.rename(ingested_files_path / path, file_inbox_path / path)
