@@ -34,8 +34,11 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        with open(options.get('file_path'),'r') as file:
-            file_listified = list(file)
+        try:
+            with open(options.get('file_path'),'r') as file:
+                file_listified = list(file)
+        except Exception as e:
+            print(e)
 
         file_name = os.path.basename(options.get('file_path'))
         ingestion_time = datetime.now()
@@ -85,5 +88,7 @@ class Command(BaseCommand):
                 register_readings = line_listified
             
             prev_record_type = line_listified[0]
-            
-        RegisterReadings.objects.bulk_create(object_list)
+        try:    
+            RegisterReadings.objects.bulk_create(object_list)
+        except Exception as e:
+            print(e)
