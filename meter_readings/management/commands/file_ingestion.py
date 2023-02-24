@@ -74,6 +74,7 @@ def create_rr_object(file_listified, ingestion_time, file_name):
     except Exception as e:
         logger.error(e)
     else:
+        logger.info(f'File "{file_name}" was successfully ingested.')
         os.rename(file_inbox_path / file_name, imported_files_path / file_name)
 
 
