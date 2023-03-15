@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Files(models.Model):
-    file_name = models.CharField(max_length=100)
+    file_name = models.CharField(max_length=100, primary_key=True)
     header = models.CharField(max_length=100)
     footer = models.CharField(max_length=100)
     ingestion_time = models.DateTimeField()
@@ -21,7 +21,10 @@ class RegisterReadings(models.Model):
     number_of_md_resets = models.IntegerField(null=True)
     meter_reading_flag = models.BooleanField(null=True)
     reading_method = models.CharField(max_length=1)
-    file_name = models.CharField(max_length=100)
+    file_name = models.ForeignKey(
+        'Files',
+        on_delete=models.CASCADE
+    )
     ingestion_time = models.DateTimeField()
 
     class Meta:

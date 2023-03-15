@@ -30,7 +30,7 @@ def rr_object(mpan_cores, meter_reading_type, register_readings, file_name, inge
         number_of_md_resets = None if register_readings[5] == '' else register_readings[5],
         meter_reading_flag = True if register_readings[6] == 'T' else False,
         reading_method = register_readings[7],
-        file_name = file_name,
+        file_name = Files.objects.get(file_name=file_name),
         ingestion_time = ingestion_time
     )
 
