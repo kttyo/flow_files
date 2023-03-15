@@ -29,5 +29,8 @@ class RegisterReadings(models.Model):
 
     class Meta:
         verbose_name_plural = "register_readings"
+        indexes = [
+            models.Index(fields=['mpan_core', 'reading_date_time'])
+        ]
 
 
